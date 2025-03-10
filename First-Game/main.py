@@ -12,8 +12,8 @@ BULLET_HEIGHT = 20
 
 
 #pLayers details
-PLAYER_WIDTH = 40
-PLAYER_HEIGHT = 60
+#PLAYER_WIDTH = 40
+#PLAYER_HEIGHT = 60
 
 #HOW much to move per press player velocity
 PLAYER_VEL = 5
@@ -35,6 +35,16 @@ BG = pygame.image.load("image.jpg")
 #if image does not fit the window
 #we can transform the width and height of image to match the windows width and height by the following code below:
 #BG = pygame.transform.scale(pygame.image.load("image.jpg"), (WIDTH, HEIGHT))
+
+SPACESHIP_WIDTH = 55
+SPACESHIP_HEIGHT = 40
+
+SPACESHIP = pygame.image.load("image2.png")
+SPACESHIP1 = pygame.transform.scale(SPACESHIP, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT))
+
+BULLET = pygame.image.load("image3.jpg")
+BULLET1 = pygame.transform.scale(BULLET, (BULLET_WIDTH, BULLET_HEIGHT))
+
 # drawing image on screen
 def draw(player , elapsed_time, bullets):
     
@@ -43,13 +53,13 @@ def draw(player , elapsed_time, bullets):
     
     
     #to insert text in python we use fstring 
-    time_text = FONT.render(f"Time: {round(elapsed_time)}s" , 1 , "white")#1 makes the text better and white is the color
+    time_text = FONT.render(f"Score: {round(elapsed_time)}" , 1 , "white")#1 makes the text better and white is the color
     # {round(elapsed_time)} round the times to nearest 1 sec
     WIN.blit(time_text, (10 , 10))
     
     
     #Drawing a rectangle which is our player in this case 
-    pygame.draw.rect(WIN , "red" , player)#also can use rgb(255, 0 , 0)
+    WIN.blit(SPACESHIP1 , (player.x , player.y))#also can use rgb(255, 0 , 0)
     
     
     #drawing bullets
@@ -57,7 +67,7 @@ def draw(player , elapsed_time, bullets):
     #if we draw them before the player they will appear behind the player
     
     for bullet in bullets:
-        pygame.draw.rect(WIN,"white",bullet)
+        WIN.blit(BULLET1 , (bullet.x , bullet.y))
     
     
    
@@ -69,7 +79,7 @@ def draw(player , elapsed_time, bullets):
 def main():
     run = True# controls when to quit
     #creating a player 
-    player = pygame.Rect(WIDTH/2, HEIGHT - PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT)#the coordinates tell where the player will span
+    player = pygame.Rect(400 , 100 , SPACESHIP_WIDTH, SPACESHIP_HEIGHT)#the coordinates tell where the player will span
     
     clock = pygame.time.Clock()#determines how fast the while loop runs 
     #which eventually controls the movement of the charcters etc
@@ -99,8 +109,8 @@ def main():
                 bullet = pygame.Rect(bullet_x , -BULLET_HEIGHT, BULLET_WIDTH,BULLET_HEIGHT)#NEGATIVE  to make it look like it is falling from above
                 bullets.append(bullet)#adding the bullet to the list    
 
-                bullet_add_increment = max(200 , bullet_add_increment -50)#max()selects the max value out of the two 
-                bullet_count = 0# to control the bullets so they don't spawn infinitly
+            bullet_add_increment = max(200 , bullet_add_increment -50)#max()selects the max value out of the two 
+            bullet_count = 0# to control the bullets so they don't spawn infinitly
         
         #Quits the game when close is clicked
         for event in pygame.event.get():
@@ -112,11 +122,11 @@ def main():
         #(player.x - PLAYER_VEL) >= 0 THIS is used so that we remain in the fourth coordinate
         if keys[pygame.K_LEFT] and (player.x - PLAYER_VEL) >=0:#K_LEFT code for left key for a K_a is used is pygame library
             player.x -= PLAYER_VEL #moves left
-        if keys[pygame.K_RIGHT] and (player.x + PLAYER_VEL) <= (WIDTH-PLAYER_WIDTH):
+        if keys[pygame.K_RIGHT] and (player.x + PLAYER_VEL) <= (WIDTH-SPACESHIP_WIDTH):
             player.x += PLAYER_VEL#moves right 
         if keys[pygame.K_UP] and (player.y - PLAYER_VEL) >=0:
             player.y -= PLAYER_VEL#moves up 
-        if keys[pygame.K_DOWN] and (player.y + PLAYER_VEL) <= (HEIGHT-PLAYER_HEIGHT):
+        if keys[pygame.K_DOWN] and (player.y + PLAYER_VEL) <= (HEIGHT-SPACESHIP_HEIGHT):
             player.y += PLAYER_VEL#moves down
         
         #moving down the bullets
